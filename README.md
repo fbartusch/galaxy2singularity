@@ -51,8 +51,7 @@ Now you want to import a Galaxy workflow into the Galaxy in the container. You h
 
 ### Import workflow from the workflow .ga file
 
-Obviously you need a .ga file of the workflow to import. Therefore this project contains a test workflow.
-You will also have to set some options in an configuration file. This repository contains a template configuration file `import_from_workflow.ini` that should work out-of-the-box with the example workflow.
+Obviously you need a .ga file of the workflow to import. The repository contains two test workflows that should work out-of-the-box. The first one is the Galaxy101 workflow, the other is a NGS workflow that maps genomic data to a reference genome and calls SNPs and INDELs afterwards.
 
 ```
 sudo python import_workflow.py --conf test/galaxy101/import_from_multiple_workflows.ini
@@ -84,10 +83,29 @@ This config-file contains following sections:
 * For each input step of the workflow you have to specify the corresponding file in your `input_directory`
 * For each compute step of the workflow you have to specify so-called runtime parameters that are not specified in the workflow
 
-There is a template for the example workflow in this repo. But you have to copy the `User` section from the preliminary config-file `execute.ini` because the API-Key and the password is randomly generated each time a new template container is created.
+The repository contains templates for the example workflows. You can use them, but you have to copy the `User` section from the preliminary config-file because the API-Key and the password is randomly generated each time a new template container is created.
+
+To print the preliminary config-file just type.
+
+```
+exec centos7-galaxy.img cat /g2s/workflows/Galaxy101/Galaxy-Workflow-galaxy101.ga.ini
+```
+
+Then replace the `User` section in `test/galaxy101/execute_galaxy101.ini` and execute the workflow.
 
 ```
 python execute_workflow.py --conf test/galaxy101/execute_galaxy101.ini 
 ```
 
 The script should start Galaxy, import the input data, invoke the workflow, and download the results into the specified output directory.
+
+## Execute the workflow in interactive mode
+
+If you don't want to inspect the workflow and access the containerized Galaxy instance via the browser, you can use the `interactive` mode.
+
+```
+python execute_workflow.py --conf test/galaxy101/execute_galaxy101.ini --interactive
+```
+
+This will startup Galaxy, binds the input directory to the container, but does not upload data or invoke the workflow. You can sign in to Galaxy using the mail and password from the previous step. Just open `http://127.0.0.1:8080/` in your browser.
+

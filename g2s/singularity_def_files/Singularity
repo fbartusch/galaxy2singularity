@@ -7,20 +7,13 @@ Include: yum
 GALAXY_VERSION: 17.01
 
 %labels
-    # Container metadata
-    # Creator of the container
     CREATOR JohnDoe
     CREATOR_MAIL john@doe.org
-    # Information about the contained workflow
     WORKFLOW_NAME someWorkflow
     WORKFLOW_VERSION 0.1
     WORKFLOW_DESCRIPTION Enter a description here
-    # Information about the contained galaxy instance
-    # Is contained as SINGULARITY_DEFFILE_GALAXY_VERSION
-    # If exists: Information about a published paper
     PAPER_CITATION None
     PAPER_DOI None
-    # If exists: URL and/or DOI of datasets that can be processed by the workflow within the container
     DATA_URL None
     DATA_DOI None
     
