@@ -91,11 +91,13 @@ class GalaxyHandler:
                 time.sleep(5)
             else:
                 # We this only for workflow execution
-                subprocess.call(["singularity", "exec", "--binds", bind_dirs, self.container_file, "sh", "/galaxy/run.sh", "--stop-daemon"], stdout=FNULL, stderr=subprocess.STDOUT)
+                subprocess.call(["singularity", "exec", "--bind", bind_dirs, self.container_file, "sh", "/galaxy/run.sh", "--log-file", "/output/paster.log", "--pid-file", " /output/paster.pid", "--stop-daemon"], stdout=FNULL, stderr=subprocess.STDOUT)
+                self.instance_running = False
                 time.sleep(5)
 
         # Remove temporary directories
         if tmp_dir:
+            logger.info("Remove temporary directory: %s", tmp_dir)
             shutil.rmtree(tmp_dir)
         
         return

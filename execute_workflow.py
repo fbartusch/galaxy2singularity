@@ -124,7 +124,7 @@ if interactive_mode:
     while(pressed_key != 'q'):
         pressed_key = raw_input("Press 'q' to leave the interactive mode:\n")
     logger.info("Leave interactive mode")
-    galaxy_handler.shutdown_galaxy(bind_dirs, tmp_dir)
+    galaxy_handler.shutdown_galaxy(sudo=False, bind_dirs=bind_dirs, tmp_dir= session_tmp_dir)
     exit(0)
 
 # Create a new history where the workflow outputs are saved
@@ -146,4 +146,6 @@ galaxy_handler.export_output_history(output_history_id, output_dir)
 shutil.copy2(config_file, output_dir)
 
 # Shutdown Galaxy
-galaxy_handler.stop_container_galaxy(bind_dirs, tmp_dir)
+logger.info("Shutdown Galaxy")
+galaxy_handler.stop_container_galaxy(sudo=False, bind_dirs=bind_dirs, tmp_dir=session_tmp_dir)
+time.sleep(10)

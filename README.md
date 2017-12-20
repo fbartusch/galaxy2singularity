@@ -88,7 +88,7 @@ The repository contains templates for the example workflows. You can use them, b
 To print the preliminary config-file just type.
 
 ```
-exec centos7-galaxy.img cat /g2s/workflows/Galaxy101/Galaxy-Workflow-galaxy101.ga.ini
+singularity exec centos7-galaxy.img cat /g2s/workflows/Galaxy101/Galaxy-Workflow-galaxy101.ga.ini
 ```
 
 Then replace the `User` section in `test/galaxy101/execute_galaxy101.ini` and execute the workflow.
