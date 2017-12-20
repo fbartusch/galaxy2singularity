@@ -57,6 +57,12 @@ Obviously you need a .ga file of the workflow to import. The repository contains
 sudo python import_workflow.py --conf test/galaxy101/import_from_multiple_workflows.ini
 ```
 
+Or to install the example NGS-workflow:
+
+```
+sudo python import_workflow.py --conf test/Map_Call_SNP_IND_Consensus/import_from_workflow.ini
+```
+
 ### Import the workflow from a running Galaxy instance
 
 If your workflow is accessible in a running Galaxy instance you can directly import it from there. In principle the script accesses the Galaxy API of the running instance, gets the details of the workflow and imports it. The import itself works like the 'Import workflow from the workflow .ga file'.
@@ -98,6 +104,13 @@ python execute_workflow.py --conf test/galaxy101/execute_galaxy101.ini
 ```
 
 The script should start Galaxy, import the input data, invoke the workflow, and download the results into the specified output directory.
+
+Analogous for the NGS-workflow:
+
+```
+singularity exec centos7-galaxy.img less /g2s/workflows/Map_Call_SNPIND_Consensus_\(annotated\)/Galaxy-Workflow-Map_Call_SNP_IND_Consensus_\(annotated\).ga.ini
+python execute_workflow.py --conf test/Map_Call_SNP_IND_Consensus/execute_example_workflow.ini
+```
 
 ## Execute the workflow in interactive mode
 
