@@ -1,0 +1,12 @@
+[General]
+container_file = centos7-galaxy.img
+galaxy_url_dest = http://127.0.0.1:8080
+master_api_key_dest = fc748fe1e271f18e1d21a325537dc
+galaxy_url_source = # INSERT # 
+api_key_source = # INSERT #
+workflow_id = # INSERT #
+tool_section_name = Test NGS Workflow
+
+[User]
+user_name = johndoe
+user_mail = john@doe.org

@@ -1,0 +1,698 @@
+{
+    "a_galaxy_workflow": "true", 
+    "annotation": "This workflow takes two files containing paired-end reads in fastqsanger format.", 
+    "format-version": "0.1", 
+    "name": "Map Call SNP/IND Consensus (annotated)", 
+    "steps": {
+        "0": {
+            "annotation": "Input Read#1 for TrimGalore! in fastqsanger format", 
+            "content_id": null, 
+            "id": 0, 
+            "input_connections": {}, 
+            "inputs": [
+                {
+                    "description": "Input Read#1 for TrimGalore! in fastqsanger format", 
+                    "name": "Read#1"
+                }
+            ], 
+            "label": "Read#1", 
+            "name": "Input dataset", 
+            "outputs": [], 
+            "position": {
+                "left": 262, 
+                "top": 662.75
+            }, 
+            "tool_errors": null, 
+            "tool_id": null, 
+            "tool_state": "{\"name\": \"Read#1\"}", 
+            "tool_version": null, 
+            "type": "data_input", 
+            "uuid": "a26d7898-9075-4a38-89be-e744b9927f9c", 
+            "workflow_outputs": []
+        }, 
+        "1": {
+            "annotation": "Input Read#1 for TrimGalore! in fastqsanger format", 
+            "content_id": null, 
+            "id": 1, 
+            "input_connections": {}, 
+            "inputs": [
+                {
+                    "description": "Input Read#1 for TrimGalore! in fastqsanger format", 
+                    "name": "Read#2"
+                }
+            ], 
+            "label": "Read#2", 
+            "name": "Input dataset", 
+            "outputs": [], 
+            "position": {
+                "left": 263, 
+                "top": 769.75
+            }, 
+            "tool_errors": null, 
+            "tool_id": null, 
+            "tool_state": "{\"name\": \"Read#2\"}", 
+            "tool_version": null, 
+            "type": "data_input", 
+            "uuid": "5d1b3519-4aff-4d87-a150-b05f1a438fe0", 
+            "workflow_outputs": []
+        }, 
+        "2": {
+            "annotation": "References sequence", 
+            "content_id": null, 
+            "id": 2, 
+            "input_connections": {}, 
+            "inputs": [
+                {
+                    "description": "References sequence", 
+                    "name": "Reference"
+                }
+            ], 
+            "label": null, 
+            "name": "Input dataset", 
+            "outputs": [], 
+            "position": {
+                "left": 1046, 
+                "top": 1078.75
+            }, 
+            "tool_errors": null, 
+            "tool_id": null, 
+            "tool_state": "{\"name\": \"Reference\"}", 
+            "tool_version": null, 
+            "type": "data_input", 
+            "uuid": "5ecc66f0-bdcb-48d5-a325-785f6ea70760", 
+            "workflow_outputs": []
+        }, 
+        "3": {
+            "annotation": "Trim adapter sequence (automatically detected)", 
+            "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/trim_galore/trim_galore/0.4.2", 
+            "id": 3, 
+            "input_connections": {
+                "singlePaired|input_mate1": {
+                    "id": 0, 
+                    "output_name": "output"
+                }, 
+                "singlePaired|input_mate2": {
+                    "id": 1, 
+                    "output_name": "output"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Trim Galore!", 
+                    "name": "singlePaired"
+                }, 
+                {
+                    "description": "runtime parameter for tool Trim Galore!", 
+                    "name": "singlePaired"
+                }
+            ], 
+            "label": null, 
+            "name": "Trim Galore!", 
+            "outputs": [
+                {
+                    "name": "trimmed_reads_paired_collection", 
+                    "type": "input"
+                }, 
+                {
+                    "name": "trimmed_reads_unpaired_collection", 
+                    "type": "input"
+                }, 
+                {
+                    "name": "trimmed_reads_single", 
+                    "type": "fastqsanger"
+                }, 
+                {
+                    "name": "trimmed_reads_pair1", 
+                    "type": "fastqsanger"
+                }, 
+                {
+                    "name": "trimmed_reads_pair2", 
+                    "type": "fastqsanger"
+                }, 
+                {
+                    "name": "unpaired_reads_1", 
+                    "type": "fastqsanger"
+                }, 
+                {
+                    "name": "unpaired_reads_2", 
+                    "type": "fastqsanger"
+                }, 
+                {
+                    "name": "report_file", 
+                    "type": "txt"
+                }
+            ], 
+            "position": {
+                "left": 1022, 
+                "top": 278.75
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/trim_galore/trim_galore/0.4.2", 
+            "tool_shed_repository": {
+                "changeset_revision": "1bfc7254232e", 
+                "name": "trim_galore", 
+                "owner": "bgruening", 
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            }, 
+            "tool_state": "{\"__page__\": 0, \"__rerun_remap_job_id__\": null, \"params\": \"{\\\"settingsType\\\": \\\"default\\\", \\\"__current_case__\\\": 0}\", \"rrbs\": \"{\\\"settingsType\\\": \\\"default\\\", \\\"__current_case__\\\": 0}\", \"singlePaired\": \"{\\\"three_prime_clip_R1\\\": \\\"\\\", \\\"three_prime_clip_R2\\\": \\\"\\\", \\\"input_mate2\\\": {\\\"__class__\\\": \\\"RuntimeValue\\\"}, \\\"input_mate1\\\": {\\\"__class__\\\": \\\"RuntimeValue\\\"}, \\\"sPaired\\\": \\\"paired\\\", \\\"__current_case__\\\": 1, \\\"trim1\\\": \\\"false\\\", \\\"trimming\\\": {\\\"trimming_select\\\": \\\"\\\", \\\"__current_case__\\\": 0}}\"}", 
+            "tool_version": "0.4.2", 
+            "type": "tool", 
+            "uuid": "58202402-665e-4120-acbb-a82b5df95da6", 
+            "workflow_outputs": []
+        }, 
+        "4": {
+            "annotation": "Map trimmed reads to reference with default options", 
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/bowtie2/bowtie2/2.2.6.2", 
+            "id": 4, 
+            "input_connections": {
+                "library|input_1": {
+                    "id": 3, 
+                    "output_name": "trimmed_reads_pair1"
+                }, 
+                "library|input_2": {
+                    "id": 3, 
+                    "output_name": "trimmed_reads_pair2"
+                }, 
+                "reference_genome|own_file": {
+                    "id": 2, 
+                    "output_name": "output"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Bowtie2", 
+                    "name": "reference_genome"
+                }, 
+                {
+                    "description": "runtime parameter for tool Bowtie2", 
+                    "name": "library"
+                }, 
+                {
+                    "description": "runtime parameter for tool Bowtie2", 
+                    "name": "library"
+                }
+            ], 
+            "label": null, 
+            "name": "Bowtie2", 
+            "outputs": [
+                {
+                    "name": "output_unaligned_reads_l", 
+                    "type": "fastqsanger"
+                }, 
+                {
+                    "name": "output_aligned_reads_l", 
+                    "type": "fastqsanger"
+                }, 
+                {
+                    "name": "output_aligned_reads_r", 
+                    "type": "fastqsanger"
+                }, 
+                {
+                    "name": "output_unaligned_reads_r", 
+                    "type": "fastqsanger"
+                }, 
+                {
+                    "name": "output", 
+                    "type": "bam"
+                }, 
+                {
+                    "name": "output_sam", 
+                    "type": "sam"
+                }, 
+                {
+                    "name": "mapping_stats", 
+                    "type": "txt"
+                }
+            ], 
+            "position": {
+                "left": 1416, 
+                "top": 369.75
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/bowtie2/bowtie2/2.2.6.2", 
+            "tool_shed_repository": {
+                "changeset_revision": "a9d4f71dbfb0", 
+                "name": "bowtie2", 
+                "owner": "devteam", 
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            }, 
+            "tool_state": "{\"__page__\": 0, \"__rerun_remap_job_id__\": null, \"library\": \"{\\\"aligned_file\\\": \\\"false\\\", \\\"unaligned_file\\\": \\\"false\\\", \\\"input_2\\\": {\\\"__class__\\\": \\\"RuntimeValue\\\"}, \\\"__current_case__\\\": 1, \\\"input_1\\\": {\\\"__class__\\\": \\\"RuntimeValue\\\"}, \\\"type\\\": \\\"paired\\\", \\\"paired_options\\\": {\\\"paired_options_selector\\\": \\\"no\\\", \\\"__current_case__\\\": 1}}\", \"reference_genome\": \"{\\\"source\\\": \\\"history\\\", \\\"__current_case__\\\": 1, \\\"own_file\\\": {\\\"__class__\\\": \\\"RuntimeValue\\\"}}\", \"rg\": \"{\\\"rg_selector\\\": \\\"do_not_set\\\", \\\"__current_case__\\\": 3}\", \"save_mapping_stats\": \"\\\"false\\\"\", \"analysis_type\": \"{\\\"analysis_type_selector\\\": \\\"simple\\\", \\\"presets\\\": \\\"no_presets\\\", \\\"__current_case__\\\": 0}\"}", 
+            "tool_version": "2.2.6.2", 
+            "type": "tool", 
+            "uuid": "918ef6cf-70d6-441a-b80e-2c602442dd46", 
+            "workflow_outputs": []
+        }, 
+        "5": {
+            "annotation": "Run samtools stats on Bowtie2 output .bam file", 
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/samtools_stats/samtools_stats/2.0", 
+            "id": 5, 
+            "input_connections": {
+                "input_file": {
+                    "id": 4, 
+                    "output_name": "output"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Stats", 
+                    "name": "input_file"
+                }
+            ], 
+            "label": null, 
+            "name": "Stats", 
+            "outputs": [
+                {
+                    "name": "output", 
+                    "type": "tabular"
+                }
+            ], 
+            "position": {
+                "left": 1796.7166748046875, 
+                "top": 246
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/samtools_stats/samtools_stats/2.0", 
+            "tool_shed_repository": {
+                "changeset_revision": "8cfc17e27132", 
+                "name": "samtools_stats", 
+                "owner": "devteam", 
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            }, 
+            "tool_state": "{\"coverage_max\": \"\\\"1000\\\"\", \"__page__\": 0, \"input_file\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"gc_depth\": \"\\\"20000.0\\\"\", \"insert_size\": \"\\\"8000\\\"\", \"most_inserts\": \"\\\"0.99\\\"\", \"coverage_step\": \"\\\"1\\\"\", \"coverage_min\": \"\\\"1\\\"\", \"read_length\": \"\\\"0\\\"\", \"trim_quality\": \"\\\"0\\\"\", \"filter_by_flags\": \"{\\\"__current_case__\\\": 1, \\\"filter_flags\\\": \\\"nofilter\\\"}\", \"split_output\": \"{\\\"split_output_selector\\\": \\\"no\\\", \\\"__current_case__\\\": 0}\", \"use_reference\": \"{\\\"use_ref_selector\\\": \\\"no\\\", \\\"__current_case__\\\": 1}\", \"__rerun_remap_job_id__\": null, \"remove_dups\": \"\\\"false\\\"\"}", 
+            "tool_version": "2.0", 
+            "type": "tool", 
+            "uuid": "b08dd48d-9439-41e7-a409-b8b0368da5a3", 
+            "workflow_outputs": []
+        }, 
+        "6": {
+            "annotation": "Report variants from the Bowtie2 Mapping. Use the default options.", 
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/samtools_mpileup/samtools_mpileup/2.1.3", 
+            "id": 6, 
+            "input_connections": {
+                "reference_source|input_bam": {
+                    "id": 4, 
+                    "output_name": "output"
+                }, 
+                "reference_source|ref_file": {
+                    "id": 2, 
+                    "output_name": "output"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool MPileup", 
+                    "name": "reference_source"
+                }, 
+                {
+                    "description": "runtime parameter for tool MPileup", 
+                    "name": "reference_source"
+                }
+            ], 
+            "label": null, 
+            "name": "MPileup", 
+            "outputs": [
+                {
+                    "name": "output_mpileup", 
+                    "type": "pileup"
+                }
+            ], 
+            "position": {
+                "left": 1779.5, 
+                "top": 607.5
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/samtools_mpileup/samtools_mpileup/2.1.3", 
+            "tool_shed_repository": {
+                "changeset_revision": "583abf29fc8e", 
+                "name": "samtools_mpileup", 
+                "owner": "devteam", 
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            }, 
+            "tool_state": "{\"__page__\": 0, \"advanced_options\": \"{\\\"advanced_options_selector\\\": \\\"basic\\\", \\\"__current_case__\\\": 0}\", \"__rerun_remap_job_id__\": null, \"genotype_likelihood_computation_type\": \"{\\\"genotype_likelihood_computation_type_selector\\\": \\\"perform_genotype_likelihood_computation\\\", \\\"output_format\\\": \\\"--VCF\\\", \\\"perform_indel_calling\\\": {\\\"__current_case__\\\": 0, \\\"perform_indel_calling_selector\\\": \\\"perform_indel_calling_def\\\"}, \\\"compressed\\\": \\\"false\\\", \\\"__current_case__\\\": 0, \\\"output_tags\\\": null}\", \"reference_source\": \"{\\\"ref_file\\\": {\\\"__class__\\\": \\\"RuntimeValue\\\"}, \\\"reference_source_selector\\\": \\\"history\\\", \\\"input_bam\\\": {\\\"__class__\\\": \\\"RuntimeValue\\\"}, \\\"__current_case__\\\": 1}\"}", 
+            "tool_version": "2.1.3", 
+            "type": "tool", 
+            "uuid": "fcc26034-563e-47a6-bada-a302bc1162fb", 
+            "workflow_outputs": []
+        }, 
+        "7": {
+            "annotation": "SNP/indel variant calling from VCF/BCF. To be used in conjunction with samtools mpileup.", 
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/bcftools_call/bcftools_call/1.4.0", 
+            "id": 7, 
+            "input_connections": {
+                "input_file": {
+                    "id": 6, 
+                    "output_name": "output_mpileup"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool bcftools call", 
+                    "name": "sec_restrict"
+                }, 
+                {
+                    "description": "runtime parameter for tool bcftools call", 
+                    "name": "input_file"
+                }, 
+                {
+                    "description": "runtime parameter for tool bcftools call", 
+                    "name": "sec_file_format"
+                }, 
+                {
+                    "description": "runtime parameter for tool bcftools call", 
+                    "name": "sec_file_format"
+                }
+            ], 
+            "label": null, 
+            "name": "bcftools call", 
+            "outputs": [
+                {
+                    "name": "output_file", 
+                    "type": "vcf"
+                }
+            ], 
+            "position": {
+                "left": 2061.5, 
+                "top": 562.5
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/bcftools_call/bcftools_call/1.4.0", 
+            "tool_shed_repository": {
+                "changeset_revision": "3296c3680d96", 
+                "name": "bcftools_call", 
+                "owner": "iuc", 
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            }, 
+            "tool_state": "{\"__page__\": 0, \"sec_restrict\": \"{\\\"regions\\\": {\\\"__current_case__\\\": 0, \\\"regions_src\\\": \\\"__none__\\\"}, \\\"invert_samples_file\\\": \\\"false\\\", \\\"samples_file\\\": {\\\"__class__\\\": \\\"RuntimeValue\\\"}, \\\"invert_samples\\\": \\\"false\\\", \\\"samples\\\": \\\"\\\"}\", \"input_file\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"sec_file_format\": \"{\\\"invert_samples_file\\\": \\\"false\\\", \\\"invert_samples\\\": \\\"false\\\", \\\"samples_file\\\": {\\\"__class__\\\": \\\"RuntimeValue\\\"}, \\\"regions\\\": {\\\"__current_case__\\\": 0, \\\"regions_src\\\": \\\"__none__\\\"}, \\\"ploidy_file\\\": {\\\"__class__\\\": \\\"RuntimeValue\\\"}, \\\"samples\\\": \\\"\\\", \\\"ploidy\\\": null}\", \"__rerun_remap_job_id__\": null, \"sec_consensus_variant_calling\": \"{\\\"variant_calling\\\": {\\\"targets\\\": {\\\"__current_case__\\\": 0, \\\"targets_src\\\": \\\"__none__\\\"}, \\\"method\\\": \\\"consensus\\\", \\\"__current_case__\\\": 1, \\\"genotypes\\\": {\\\"constrain\\\": \\\"none\\\", \\\"__current_case__\\\": 0}}, \\\"prior\\\": \\\"0.0011\\\", \\\"pval_threshold\\\": \\\"0.5\\\"}\", \"output_type\": \"\\\"v\\\"\", \"sec_input_output\": \"{\\\"variants_only\\\": \\\"false\\\", \\\"keep_alts\\\": \\\"false\\\", \\\"keep_masked_ref\\\": \\\"false\\\", \\\"format_fields\\\": \\\"\\\", \\\"skip_variants\\\": null}\"}", 
+            "tool_version": "1.4.0", 
+            "type": "tool", 
+            "uuid": "52514879-42a1-496c-93b8-6f812d4f0c0f", 
+            "workflow_outputs": []
+        }, 
+        "8": {
+            "annotation": "Exclude  Qual < 20 OR (Qual < 25 AND RPB < 0.1) OR (Qual < 25 AND AC < 2)", 
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/bcftools_filter/bcftools_filter/1.4.0", 
+            "id": 8, 
+            "input_connections": {
+                "input_file": {
+                    "id": 7, 
+                    "output_name": "output_file"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool bcftools filter", 
+                    "name": "sec_restrict"
+                }, 
+                {
+                    "description": "runtime parameter for tool bcftools filter", 
+                    "name": "input_file"
+                }
+            ], 
+            "label": null, 
+            "name": "bcftools filter", 
+            "outputs": [
+                {
+                    "name": "output_file", 
+                    "type": "vcf"
+                }
+            ], 
+            "position": {
+                "left": 2315.5, 
+                "top": 563.5
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/bcftools_filter/bcftools_filter/1.4.0", 
+            "tool_shed_repository": {
+                "changeset_revision": "cfd95c205d55", 
+                "name": "bcftools_filter", 
+                "owner": "iuc", 
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            }, 
+            "tool_state": "{\"__page__\": 0, \"sec_filter\": \"{\\\"select_set_GTs\\\": null, \\\"IndelGap\\\": \\\"10\\\", \\\"SnpGap\\\": \\\"3\\\", \\\"soft_filter\\\": \\\"LowQual\\\", \\\"mode\\\": null}\", \"sec_restrict\": \"{\\\"regions\\\": {\\\"__current_case__\\\": 0, \\\"regions_src\\\": \\\"__none__\\\"}, \\\"exclude\\\": {\\\"__class__\\\": \\\"RuntimeValue\\\"}, \\\"include\\\": \\\"\\\", \\\"targets\\\": {\\\"__current_case__\\\": 0, \\\"targets_src\\\": \\\"__none__\\\"}}\", \"input_file\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__rerun_remap_job_id__\": null, \"output_type\": \"\\\"v\\\"\"}", 
+            "tool_version": "1.4.0", 
+            "type": "tool", 
+            "uuid": "6b316ed5-8889-49be-bb25-0e5d30437fc6", 
+            "workflow_outputs": []
+        }, 
+        "9": {
+            "annotation": "Include just SNPs", 
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/bcftools_filter/bcftools_filter/1.4.0", 
+            "id": 9, 
+            "input_connections": {
+                "input_file": {
+                    "id": 8, 
+                    "output_name": "output_file"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool bcftools filter", 
+                    "name": "input_file"
+                }
+            ], 
+            "label": null, 
+            "name": "bcftools filter", 
+            "outputs": [
+                {
+                    "name": "output_file", 
+                    "type": "vcf"
+                }
+            ], 
+            "position": {
+                "left": 2612.5, 
+                "top": 555.5
+            }, 
+            "post_job_actions": {
+                "TagDatasetActionoutput_file": {
+                    "action_arguments": {
+                        "tags": "Snps"
+                    }, 
+                    "action_type": "TagDatasetAction", 
+                    "output_name": "output_file"
+                }
+            }, 
+            "tool_errors": null, 
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/bcftools_filter/bcftools_filter/1.4.0", 
+            "tool_shed_repository": {
+                "changeset_revision": "cfd95c205d55", 
+                "name": "bcftools_filter", 
+                "owner": "iuc", 
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            }, 
+            "tool_state": "{\"__page__\": 0, \"sec_filter\": \"{\\\"select_set_GTs\\\": null, \\\"IndelGap\\\": \\\"\\\", \\\"SnpGap\\\": \\\"\\\", \\\"soft_filter\\\": \\\"\\\", \\\"mode\\\": null}\", \"sec_restrict\": \"{\\\"regions\\\": {\\\"__current_case__\\\": 0, \\\"regions_src\\\": \\\"__none__\\\"}, \\\"exclude\\\": \\\"\\\", \\\"include\\\": \\\"Type=\\\\\\\"snp\\\\\\\"\\\", \\\"targets\\\": {\\\"__current_case__\\\": 0, \\\"targets_src\\\": \\\"__none__\\\"}}\", \"input_file\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__rerun_remap_job_id__\": null, \"output_type\": \"\\\"v\\\"\"}", 
+            "tool_version": "1.4.0", 
+            "type": "tool", 
+            "uuid": "9906c57f-9cca-40ea-bc2f-11a0579a06d5", 
+            "workflow_outputs": []
+        }, 
+        "10": {
+            "annotation": "Include just indels", 
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/bcftools_filter/bcftools_filter/1.4.0", 
+            "id": 10, 
+            "input_connections": {
+                "input_file": {
+                    "id": 8, 
+                    "output_name": "output_file"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool bcftools filter", 
+                    "name": "input_file"
+                }
+            ], 
+            "label": null, 
+            "name": "bcftools filter", 
+            "outputs": [
+                {
+                    "name": "output_file", 
+                    "type": "vcf"
+                }
+            ], 
+            "position": {
+                "left": 2616.5, 
+                "top": 711.5
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/bcftools_filter/bcftools_filter/1.4.0", 
+            "tool_shed_repository": {
+                "changeset_revision": "cfd95c205d55", 
+                "name": "bcftools_filter", 
+                "owner": "iuc", 
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            }, 
+            "tool_state": "{\"__page__\": 0, \"sec_filter\": \"{\\\"select_set_GTs\\\": null, \\\"IndelGap\\\": \\\"\\\", \\\"SnpGap\\\": \\\"\\\", \\\"soft_filter\\\": \\\"\\\", \\\"mode\\\": null}\", \"sec_restrict\": \"{\\\"regions\\\": {\\\"__current_case__\\\": 0, \\\"regions_src\\\": \\\"__none__\\\"}, \\\"exclude\\\": \\\"\\\", \\\"include\\\": \\\"Type=\\\\\\\"indel\\\\\\\"\\\", \\\"targets\\\": {\\\"__current_case__\\\": 0, \\\"targets_src\\\": \\\"__none__\\\"}}\", \"input_file\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__rerun_remap_job_id__\": null, \"output_type\": \"\\\"v\\\"\"}", 
+            "tool_version": "1.4.0", 
+            "type": "tool", 
+            "uuid": "ce343a3f-c112-4a01-b5db-350bd0068a03", 
+            "workflow_outputs": []
+        }, 
+        "11": {
+            "annotation": "Include just AF = 1", 
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/bcftools_filter/bcftools_filter/1.4.0", 
+            "id": 11, 
+            "input_connections": {
+                "input_file": {
+                    "id": 9, 
+                    "output_name": "output_file"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool bcftools filter", 
+                    "name": "input_file"
+                }
+            ], 
+            "label": null, 
+            "name": "bcftools filter", 
+            "outputs": [
+                {
+                    "name": "output_file", 
+                    "type": "vcf"
+                }
+            ], 
+            "position": {
+                "left": 2943.5, 
+                "top": 550.5
+            }, 
+            "post_job_actions": {
+                "TagDatasetActionoutput_file": {
+                    "action_arguments": {
+                        "tags": "HSnps"
+                    }, 
+                    "action_type": "TagDatasetAction", 
+                    "output_name": "output_file"
+                }
+            }, 
+            "tool_errors": null, 
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/bcftools_filter/bcftools_filter/1.4.0", 
+            "tool_shed_repository": {
+                "changeset_revision": "cfd95c205d55", 
+                "name": "bcftools_filter", 
+                "owner": "iuc", 
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            }, 
+            "tool_state": "{\"__page__\": 0, \"sec_filter\": \"{\\\"select_set_GTs\\\": null, \\\"IndelGap\\\": \\\"\\\", \\\"SnpGap\\\": \\\"\\\", \\\"soft_filter\\\": \\\"\\\", \\\"mode\\\": null}\", \"sec_restrict\": \"{\\\"regions\\\": {\\\"__current_case__\\\": 0, \\\"regions_src\\\": \\\"__none__\\\"}, \\\"exclude\\\": \\\"\\\", \\\"include\\\": \\\"AF=1\\\", \\\"targets\\\": {\\\"__current_case__\\\": 0, \\\"targets_src\\\": \\\"__none__\\\"}}\", \"input_file\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__rerun_remap_job_id__\": null, \"output_type\": \"\\\"v\\\"\"}", 
+            "tool_version": "1.4.0", 
+            "type": "tool", 
+            "uuid": "c5dda2c0-0bd5-4edd-895b-9d099f982a5c", 
+            "workflow_outputs": []
+        }, 
+        "12": {
+            "annotation": "Concat the filtered indels and SNPs. Min Pq = 30", 
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/bcftools_concat/bcftools_concat/1.4.0.1", 
+            "id": 12, 
+            "input_connections": {
+                "input_files": [
+                    {
+                        "id": 10, 
+                        "output_name": "output_file"
+                    }, 
+                    {
+                        "id": 9, 
+                        "output_name": "output_file"
+                    }
+                ]
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool bcftools concat", 
+                    "name": "input_files"
+                }
+            ], 
+            "label": null, 
+            "name": "bcftools concat", 
+            "outputs": [
+                {
+                    "name": "output_file", 
+                    "type": "vcf"
+                }
+            ], 
+            "position": {
+                "left": 2949.5, 
+                "top": 716.5
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/bcftools_concat/bcftools_concat/1.4.0.1", 
+            "tool_shed_repository": {
+                "changeset_revision": "2d95ed0b720a", 
+                "name": "bcftools_concat", 
+                "owner": "iuc", 
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            }, 
+            "tool_state": "{\"__page__\": 0, \"sec_restrict\": \"{\\\"regions\\\": {\\\"__current_case__\\\": 0, \\\"regions_src\\\": \\\"__none__\\\"}}\", \"sec_default\": \"{\\\"compact_PS\\\": \\\"false\\\", \\\"min_PQ\\\": \\\"30\\\", \\\"mode\\\": {\\\"overlaps\\\": {\\\"allow_overlaps\\\": \\\"yes\\\", \\\"rm_dups\\\": null, \\\"__current_case__\\\": 0}, \\\"naive\\\": \\\"no\\\", \\\"ligate\\\": \\\"false\\\", \\\"__current_case__\\\": 1}}\", \"output_type\": \"\\\"b\\\"\", \"__rerun_remap_job_id__\": null, \"input_files\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\"}", 
+            "tool_version": "1.4.0.1", 
+            "type": "tool", 
+            "uuid": "f6d99b04-a10e-4179-8c9c-c86e4b004c06", 
+            "workflow_outputs": []
+        }, 
+        "13": {
+            "annotation": "Create consensus sequence by applying indels and SNPs to the reference fasta file.", 
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/bcftools_consensus/bcftools_consensus/1.4.0", 
+            "id": 13, 
+            "input_connections": {
+                "input_file": {
+                    "id": 12, 
+                    "output_name": "output_file"
+                }, 
+                "sec_default|fasta_ref": {
+                    "id": 2, 
+                    "output_name": "output"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool bcftools consensus", 
+                    "name": "sec_default"
+                }, 
+                {
+                    "description": "runtime parameter for tool bcftools consensus", 
+                    "name": "sec_default"
+                }, 
+                {
+                    "description": "runtime parameter for tool bcftools consensus", 
+                    "name": "input_file"
+                }
+            ], 
+            "label": null, 
+            "name": "bcftools consensus", 
+            "outputs": [
+                {
+                    "name": "output_file", 
+                    "type": "fasta"
+                }, 
+                {
+                    "name": "chain_file", 
+                    "type": "txt"
+                }
+            ], 
+            "position": {
+                "left": 3268.566650390625, 
+                "top": 857.9666748046875
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/bcftools_consensus/bcftools_consensus/1.4.0", 
+            "tool_shed_repository": {
+                "changeset_revision": "858a3580dc70", 
+                "name": "bcftools_consensus", 
+                "owner": "iuc", 
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            }, 
+            "tool_state": "{\"__page__\": 0, \"sec_default\": \"{\\\"sample\\\": \\\"\\\", \\\"mask\\\": {\\\"__class__\\\": \\\"RuntimeValue\\\"}, \\\"fasta_ref\\\": {\\\"__class__\\\": \\\"RuntimeValue\\\"}, \\\"iupac_codes\\\": \\\"false\\\", \\\"select_haplotype\\\": null}\", \"__rerun_remap_job_id__\": null, \"chain\": \"\\\"false\\\"\", \"input_file\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\"}", 
+            "tool_version": "1.4.0", 
+            "type": "tool", 
+            "uuid": "feabcf3e-c21d-42ac-b84a-8b4210fee8ed", 
+            "workflow_outputs": []
+        }
+    }, 
+    "uuid": "179745bc-2476-465b-82f7-a7d1eadd239c"
+}

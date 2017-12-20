@@ -1,0 +1,137 @@
+# Bootstrap definition example for Centos-7 with python 2.7 and a new galaxy instance.
+
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://mirror.centos.org/centos-%{OSVERSION}/%{OSVERSION}/os/$basearch/
+Include: yum
+GALAXY_VERSION: 17.01
+
+%labels
+    # Container metadata
+    # Creator of the container
+    CREATOR JohnDoe
+    CREATOR_MAIL john@doe.org
+    # Information about the contained workflow
+    WORKFLOW_NAME someWorkflow
+    WORKFLOW_VERSION 0.1
+    WORKFLOW_DESCRIPTION Enter a description here
+    # Information about the contained galaxy instance
+    # Is contained as SINGULARITY_DEFFILE_GALAXY_VERSION
+    # If exists: Information about a published paper
+    PAPER_CITATION None
+    PAPER_DOI None
+    # If exists: URL and/or DOI of datasets that can be processed by the workflow within the container
+    DATA_URL None
+    DATA_DOI None
+    
+%setup
+    echo "Looking in directory '$SINGULARITY_ROOTFS' for /bin/sh"
+    if [ ! -x "$SINGULARITY_ROOTFS/bin/sh" ]; then
+        echo "Hrmm, this container does not have /bin/sh installed..."
+        exit 1
+    fi
+
+    # Copy the two Galaxy configuration files used for importing the Galaxy workflow into the container
+    # and the other one for running the workflow in the container
+    cp ./g2s/galaxy/config/${GALAXY_VERSION}/galaxy.ini_import  $SINGULARITY_ROOTFS
+    cp ./g2s/galaxy/config/${GALAXY_VERSION}/galaxy.ini_execute $SINGULARITY_ROOTFS
+
+    # TODO Move that to %file section?
+    # Copy the script that changes the Galaxy configuration after the workflow import step into the container
+    cp ./g2s/scripts/swap_to_galaxy_import_config.sh $SINGULARITY_ROOTFS
+    cp ./g2s/scripts/swap_to_galaxy_execute_config.sh $SINGULARITY_ROOTFS
+
+    exit 0
+
+%post
+    # Bind points for input, output data, and Galaxy's temporary directory
+    mkdir /input
+    mkdir /output
+    mkdir /galaxy_tmp
+    # Directories for imported workflows
+    mkdir /g2s
+    mkdir /g2s/workflows
+
+    # Place the two Galaxy config files into the /g2s directory
+    mkdir -p /g2s/galaxy/config
+    mv /galaxy.ini_import /g2s/galaxy/config/
+    mv /galaxy.ini_execute /g2s/galaxy/config/
+    
+	# TODO Some of these are not needed I think ... 
+	echo "Installing Development Tools"
+	yum -y groupinstall 'Development Tools'	
+
+	echo "Adding EPEL repository"
+	yum -y install epel-release
+
+	echo "Installing Python and PIP"
+	yum -y install python-pip python-devel
+
+	echo "Installing git"
+	yum -y install git
+
+	echo "Installing modules that are just needed if one wants to work inside the container"
+	yum -y install vim
+
+    echo "Install samtools because many Galaxy tools won't run without a system samtools ... "
+    cd /
+    yum -y install epel-release zlib-devel ncurses-devel bzip2-devel lzma xz-devel wget 
+    wget https://github.com/samtools/samtools/releases/download/1.4.1/samtools-1.4.1.tar.bz2
+    tar xvf samtools-1.4.1.tar.bz2
+    cd samtools-1.4.1
+    make
+    make install prefix=/usr/local
+
+    echo "Install bcftools because many Galaxy tools won't run without a system samtools ... "
+    wget https://github.com/samtools/bcftools/releases/download/1.4.1/bcftools-1.4.1.tar.bz2
+    tar xvf bcftools-1.4.1.tar.bz2
+    cd bcftools-1.4.1
+    make
+    make install prefix=/usr/local
+
+	# Installing packages that are needed by galaxy
+	yum -y install bzip2
+
+	echo "Install Galaxy"
+	cd /
+	git clone -b release_${GALAXY_VERSION} https://github.com/galaxyproject/galaxy.git
+
+	# Set some configuration files
+    # The configuration for importing the workflow from source Galaxy to destination Galaxy
+	cp /g2s/galaxy/config/galaxy.ini_import /galaxy/config/galaxy.ini
+	mv /galaxy/config/dependency_resolvers_conf.xml.sample /galaxy/config/dependency_resolvers_conf.xml
+
+    # Run Galaxy the first time in damon mode. This will startup Galaxy and installs dependencies
+    # Wait until Galaxy is reade, then exit the bootstrapping
+    sh /galaxy/run.sh --daemon
+    
+    RESPONSE=$(curl -I http://localhost:8080 | grep HTTP | cut -d ' ' -f3)
+    while [ ! $RESPONSE ]
+    do
+        echo "Response: $RESPONSE"
+        echo "Waiting 10s"
+        sleep 10
+        RESPONSE=$(curl -I http://localhost:8080 | grep HTTP | cut -d ' ' -f3)
+    done
+
+    echo "Response: $RESPONSE"
+    echo "Galaxy is responding"
+    echo "Stop Galaxy daemon"
+
+    sh /galaxy/run.sh --stop-daemon
+
+    chmod -R 777 /galaxy/database/
+
+    echo "Bootstrapping post completed"
+	exit 0
+
+%files
+    # Copy scripts into the container
+    ./g2s/scripts /g2s/
+
+%runscript
+	echo "Arguments received: $*"
+	exec sh /galaxy/run.sh --log-file /output/paster.log --pid-file /output/paster.pid --daemon
+
+%test
+	echo "Test"
