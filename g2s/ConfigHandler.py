@@ -140,9 +140,10 @@ class ConfigHandler():
 
         # Data section
         execute_config.add_section('Data')
-        execute_config.set('Data', 'input_directory', '# INSERT_PATH #')
-        execute_config.set('Data', 'output_directory', '# INSERT_PATH #')
+        execute_config.set('Data', 'input_directory', '/input')
+        execute_config.set('Data', 'output_directory', '/output')
         execute_config.set('Data', 'tmp_directory', '/tmp')
+	execute_config.set('Data', 'mount_input_directory', 'True')
 
         steps = wf_handler.wf_description['steps']
 

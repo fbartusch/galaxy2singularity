@@ -27,10 +27,11 @@ class GalaxyHandler:
     '''
     This class represents a Galaxy instance and provides functions to interact with that instance.
     '''
-    def __init__(self, url, api_key, container_file=None):
+    def __init__(self, url, api_key, container_file=None, oci_bundle=False):
         self.url = url
         self.api_key = api_key
         self.container_file = container_file
+        self.oci_bundle = oci_bundle
        
         # Bioblend GalaxyInstance
         self.instance = None
@@ -50,12 +51,15 @@ class GalaxyHandler:
         Run a containerized Galaxy instance.
         '''
         with open(os.devnull, 'w') as FNULL:
-            if writable:
-                subprocess.call(["sudo", "singularity", "exec", "-w", self.container_file, "sh", "/galaxy/run.sh", "--daemon"], stdout=FNULL)
-            elif binds:
-                subprocess.call(["singularity", "exec", "--bind", binds, self.container_file, "sh", "/galaxy/run.sh","--log-file", "/output/paster.log", "--pid-file", " /output/paster.pid", "--daemon"], stdout=FNULL, stderr=subprocess.STDOUT)
+            if self.oci_bundle:
+                subprocess.call(["sh", "/galaxy/run.sh","--log-file", "/output/paster.log", "--pid-file", " /output/paster.pid", "--daemon"], stdout=FNULL, stderr=subprocess.STDOUT)
             else:
-                subprocess.call(["singularity", "exec", self.container_file, "sh", "/galaxy/run.sh", "--daemon"], stdout=FNULL)
+                if writable:
+                    subprocess.call(["sudo", "singularity", "exec", "-w", self.container_file, "sh", "/galaxy/run.sh", "--daemon"], stdout=FNULL, stderr=subprocess.STDOUT)
+                elif binds:
+                    subprocess.call(["singularity", "exec", "--bind", binds, self.container_file, "sh", "/galaxy/run.sh","--log-file", "/output/paster.log", "--pid-file", " /output/paster.pid", "--daemon"], stdout=FNULL, stderr=subprocess.STDOUT)
+                else:
+                    subprocess.call(["singularity", "exec", self.container_file, "sh", "/galaxy/run.sh", "--daemon"], stdout=FNULL, stderr=subprocess.STDOUT)
     
             # Wait until the Galaxy instance is available but do not wait longer than 1 minute
             response = None
@@ -84,16 +88,22 @@ class GalaxyHandler:
         Remove an existing temporary directory
         '''
         with open(os.devnull, 'w') as FNULL:
-            if sudo:
-                # We use sudo only for importing workflows, so no binds.
-                subprocess.call(["sudo", "singularity", "exec", "-w", self.container_file, "sh", "/galaxy/run.sh", "--stop-daemon"], stdout=FNULL, stderr=subprocess.STDOUT)
+            if self.oci_bundle:
+                # No binds, no Singularity, just plain run.sh stop-daemon
+                subprocess.call(["sh", "/galaxy/run.sh", "--stop-daemon"], stdout=FNULL, stderr=subprocess.STDOUT)
                 self.instance_running = False
                 time.sleep(5)
             else:
-                # We this only for workflow execution
-                subprocess.call(["singularity", "exec", "--bind", bind_dirs, self.container_file, "sh", "/galaxy/run.sh", "--log-file", "/output/paster.log", "--pid-file", " /output/paster.pid", "--stop-daemon"], stdout=FNULL, stderr=subprocess.STDOUT)
-                self.instance_running = False
-                time.sleep(5)
+                if sudo:
+                    # We use sudo only for importing workflows, so no binds.
+                    subprocess.call(["sudo", "singularity", "exec", "-w", self.container_file, "sh", "/galaxy/run.sh", "--stop-daemon"], stdout=FNULL, stderr=subprocess.STDOUT)
+                    self.instance_running = False
+                    time.sleep(5)
+                else:
+                    # We this only for workflow execution
+                    subprocess.call(["singularity", "exec", "--bind", bind_dirs, self.container_file, "sh", "/galaxy/run.sh", "--log-file", "/output/paster.log", "--pid-file", " /output/paster.pid", "--stop-daemon"], stdout=FNULL, stderr=subprocess.STDOUT)
+                    self.instance_running = False
+                    time.sleep(5)
 
         # Remove temporary directories
         if tmp_dir:

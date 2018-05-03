@@ -12,6 +12,7 @@ class WorkflowHandler():
     def __init__(self, galaxy=None, wf_id=None, wf_file=None):
         if galaxy:
             # Needed if workflow is imported from another Galaxy instance
+            # This is also the case if you want to execute a Galaxy workflow
             self.import_from_galaxy=True
             self.galaxy = galaxy      # A GalaxyHandler
             self.wf_id = wf_id
@@ -21,7 +22,7 @@ class WorkflowHandler():
             self.wf_file = wf_file
         
         # Get the workflow description
-        self.wf_description = self.get_wf_description
+        self.wf_description = self.get_wf_description()
 
 
     def get_wf_description(self):
@@ -30,7 +31,7 @@ class WorkflowHandler():
         '''
         if self.import_from_galaxy:
             try:
-                self.wf_description = galaxy.workflow_client.import_workflow_dict(wf_id)
+                self.wf_description = galaxy.workflow_client.import_workflow_dict(self.wf_id)
             except:
                 logger.error("Error while getting workflow_dict from Galaxy")
                 return False
@@ -161,7 +162,6 @@ class WorkflowHandler():
                 replacement_params=None,
                 allow_tool_state_corrections=None)
 
-            logger.info("Before while true")
             while True:
                 history_status = self.galaxy.history_client.get_status(wf_invocation['history_id'])
                 logger.info("Percent Complete: %s", str(history_status['percent_complete']))
@@ -172,7 +172,7 @@ class WorkflowHandler():
                     logger.info("No. Errors: " + str(history_status['state_details']['error']))
                     break
         except:
-            logger.error("Error during workflow execution. Please see paster.log at in the output directorys for more details.")
+            logger.error("Error during workflow execution. Please see paster.log at in the output directory for more details.")
 
 
 

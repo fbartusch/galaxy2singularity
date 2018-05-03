@@ -29,7 +29,6 @@ GALAXY_VERSION: 17.01
     cp ./g2s/galaxy/config/${GALAXY_VERSION}/galaxy.ini_import  $SINGULARITY_ROOTFS
     cp ./g2s/galaxy/config/${GALAXY_VERSION}/galaxy.ini_execute $SINGULARITY_ROOTFS
 
-    # TODO Move that to %file section?
     # Copy the script that changes the Galaxy configuration after the workflow import step into the container
     cp ./g2s/scripts/swap_to_galaxy_import_config.sh $SINGULARITY_ROOTFS
     cp ./g2s/scripts/swap_to_galaxy_execute_config.sh $SINGULARITY_ROOTFS
@@ -42,7 +41,6 @@ GALAXY_VERSION: 17.01
     mkdir /output
     mkdir /galaxy_tmp
     # Directories for imported workflows
-    mkdir /g2s
     mkdir /g2s/workflows
 
     # Place the two Galaxy config files into the /g2s directory
@@ -64,7 +62,7 @@ GALAXY_VERSION: 17.01
 	yum -y install git
 
 	echo "Installing modules that are just needed if one wants to work inside the container"
-	yum -y install vim
+	yum -y install vim xterm
 
     echo "Install samtools because many Galaxy tools won't run without a system samtools ... "
     cd /
@@ -84,6 +82,8 @@ GALAXY_VERSION: 17.01
 
 	# Installing packages that are needed by galaxy
 	yum -y install bzip2
+
+    pip install bioblend==0.9.0
 
 	echo "Install Galaxy"
 	cd /
@@ -119,12 +119,13 @@ GALAXY_VERSION: 17.01
 	exit 0
 
 %files
-    # Copy scripts into the container
-    ./g2s/scripts /g2s/
+    # Copy the galaxy2singularity python module into the container
+    ./g2s /
+    ./execute_workflow.py /
 
 %runscript
-	echo "Arguments received: $*"
-	exec sh /galaxy/run.sh --log-file /output/paster.log --pid-file /output/paster.pid --daemon
+    echo "Arguments received: $*"
+    exec sh /galaxy/run.sh --log-file /output/paster.log --pid-file /output/paster.pid --daemon
 
 %test
-	echo "Test"
+    echo "Test"

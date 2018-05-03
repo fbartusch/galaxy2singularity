@@ -32,12 +32,14 @@ from g2s.ConfigHandler import ConfigHandler
 parser = argparse.ArgumentParser(description='Run Galaxy workflow using the Galaxy API.')
 parser.add_argument("-c", "--config", type=str, required=True)
 parser.add_argument("-l", "--log", type=str, required=False, default="execute_workflow.log")
-parser.add_argument("-i", "--interactive", action='store_true')
+parser.add_argument("-i", "--interactive", action='store_true', help="Start Galaxy and do not execute a workflow. A use can access Galaxy in the browser.")
+parser.add_argument("-o", "--oci-bundle", action='store_true', help="Run as OCI bundle and not as Singularity container")
 
 args = parser.parse_args()
 config_file = args.config
 log_file = args.log
 interactive_mode = args.interactive
+oci_bundle = args.oci_bundle
 
 # Create logger
 logger = create_logger(log_file=log_file, log_level=log.DEBUG)
@@ -60,13 +62,14 @@ tmp_dir = config.get('Data', 'tmp_directory')
 user_mail = config.get('User', 'user_mail')
 user_api_key = config.get('User', 'user_api_key')
 
-# Is the path to the container file valid?
-if not os.path.isfile(container_file):
-    logger.error("Container does not exist: %s", container_file)
-    exit(1)
-if not os.access(container_file, os.R_OK):
-    logger.error("Container exists, but is not readable: %s", container_file)
-
+# Check if the container, input/output directories in the
+# execution configuration file are valid
+if not oci_bundle:
+    if not os.path.isfile(container_file):
+        logger.error("Container does not exist: %s", container_file)
+        exit(1)
+    if not os.access(container_file, os.R_OK):
+        logger.error("Container exists, but is not readable: %s", container_file)
 
 # Is the input_directory valid and does it contain all needed input files?
 if mount_input_dir:
@@ -87,29 +90,42 @@ if not os.path.isdir(output_dir):
     except:
         logger.error("Cannot create specified output_directory: %s", output_dir)
 
-# Is the tmp_directory valid? Try to create the temporary directory for this session. If that does not work, the temporary directory specifide is not valid.
-try:
-    tempfile.tempdir = tmp_dir
-    session_tmp_dir = tempfile.mkdtemp(prefix="galaxy2singularity_")
-except IOError as e:
-    logger.error("Cannot write to the specified tmp_directory: %s", tmp_directory)
-    exit(1)
+# If this container is executed as OCI bundle we assume that the input/output/tmp directory binds are configured beforehand.
+# For Singularity, check if the tmp_directory is valid.
+# Try to create the temporary directory for this session. If that does not work, the temporary directory specifide is not valid.
+if not oci_bundle:
+    try:
+        tempfile.tempdir = tmp_dir
+        session_tmp_dir = tempfile.mkdtemp(prefix="galaxy2singularity_")
+    except IOError as e:
+        logger.error("Cannot write to the specified tmp_directory: %s", tmp_directory)
+        exit(1)
 
 # Copy the integrated tools panel and the universe.sqlite into the tmp directory
-tmp_bind = session_tmp_dir + ":/galaxy_tmp"
-subprocess.call(["singularity", "exec", "--bind", tmp_bind, container_file, "cp", "/galaxy/integrated_tool_panel.xml", "/galaxy/database/universe.sqlite", "/galaxy_tmp"])
+if oci_bundle:
+    shutil.copy2("/galaxy/integrated_tool_panel.xml", tmp_dir)
+    shutil.copy2("/galaxy/database/universe.sqlite", tmp_dir)
+else:
+    tmp_bind = session_tmp_dir + ":/galaxy_tmp"
+    subprocess.call(["singularity", "exec", "--bind", tmp_bind, container_file, "cp", "/galaxy/integrated_tool_panel.xml", "/galaxy/database/universe.sqlite", "/galaxy_tmp"])
 
 # Start Galaxy in daemon mode with binds to input, output und temporary directories
-if mount_input_dir:
-    input_bind = input_dir + ":/input,"
+if oci_bundle:
+    galaxy_handler = GalaxyHandler(galaxy_url, user_api_key, container_file=None, oci_bundle=True)
+    galaxy_handler.start_container_galaxy()
 else:
-    input_bind = ""
-output_bind = output_dir +":/output,"
-bind_dirs = input_bind + output_bind + tmp_bind
+    if mount_input_dir:
+        input_bind = input_dir + ":/input,"
+    else:
+        input_bind = ""
+    output_bind = output_dir +":/output,"
+    bind_dirs = input_bind + output_bind + tmp_bind
 
-# Start Galaxy in the container
-galaxy_handler = GalaxyHandler(galaxy_url, user_api_key, container_file=container_file)
-galaxy_handler.start_container_galaxy(binds=bind_dirs)
+    # Start Galaxy in the container
+    galaxy_handler = GalaxyHandler(galaxy_url, user_api_key, container_file=container_file)
+    galaxy_handler.start_container_galaxy(binds=bind_dirs)
+
+# Initialize GalaxyHandlers etc.
 if not galaxy_handler.initialize():
     logger.error("Error during initialization of GalaxyHandler for source Galaxy")
     exit(1)
@@ -118,7 +134,7 @@ if not galaxy_handler.initialize():
 workflow_handler = WorkflowHandler(galaxy_handler, wf_id) 
 
 # If interactive mode is enabled, stop here and wait until the user exits the script
-if interactive_mode:
+if interactive_mode and not oci_bundle:
     logger.info("Entering interactive mode")
     pressed_key = ''
     while(pressed_key != 'q'):
@@ -147,5 +163,8 @@ shutil.copy2(config_file, output_dir)
 
 # Shutdown Galaxy
 logger.info("Shutdown Galaxy")
-galaxy_handler.stop_container_galaxy(sudo=False, bind_dirs=bind_dirs, tmp_dir=session_tmp_dir)
-time.sleep(10)
+if oci_bundle:
+    galaxy_handler.stop_container_galaxy(sudo=False, bind_dirs=None, tmp_dir=None)
+else:
+    galaxy_handler.stop_container_galaxy(sudo=False, bind_dirs=bind_dirs, tmp_dir=session_tmp_dir)
+
