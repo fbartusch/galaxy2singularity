@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/114872334.svg)](https://zenodo.org/badge/latestdoi/114872334)
+
 # galaxy2singularity
 
 Galaxy2singularityimports your existing Galaxy workflow into a Singularity container. The container is able to run the whole workflow on its own.
