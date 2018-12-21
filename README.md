@@ -35,6 +35,12 @@ sudo make install
 
 Install Python 2.7 and bioblend 0.9.0 by creating your own Python environment with conda or just install bioblend via pip.
 
+```
+conda create -n galaxy2singularity python=2
+source activate galaxy2singularity
+pip install .
+```
+
 Last but not least, clone this repo.
 
 ## Import a Galaxy workflow to a Singularity container
